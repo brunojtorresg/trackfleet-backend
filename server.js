@@ -8,12 +8,20 @@ const app = express();
 const PORT = 5000;
 const SECRET_KEY = 'trackfleet-secret-2025'; // Em produção, use variável de ambiente
 
+// URL do seu Frontend no Vercel para correção do CORS
+// ESTA URL DEVE SER A MESMA QUE SEU FRONTEND USA PARA ACESSAR A API
+const frontendUrl = 'https://trackfleet-nk2s2r3po-brunos-projects-d9448421.vercel.app'; 
+
 // Caminhos dos arquivos
 const DATA_FILE = path.join(__dirname, 'data', 'frota.json');
-const USERS_FILE = path.join(__dirname, 'data', 'users.json'); // NOVO ARQUIVO DE USUÁRIOS
+const USERS_FILE = path.join(__dirname, 'data', 'users.json');
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: frontendUrl, // Permite apenas requisições desta origem (Vercel)
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+}));
 app.use(express.json());
 
 // --- Funções de Manipulação de Dados ---
@@ -22,11 +30,20 @@ app.use(express.json());
 const garantirArquivo = (filePath) => {
     if (!fs.existsSync(filePath)) {
         fs.mkdirSync(path.dirname(filePath), { recursive: true });
-        fs.writeFileSync(filePath, JSON.stringify([], null, 2));
+        // Adicionando um usuário inicial se o arquivo for criado do zero
+        if (filePath === USERS_FILE) {
+             const usuariosIniciais = [{ 
+                email: "testador@trackfleet.com", 
+                senha: "senhaforte" 
+             }];
+             fs.writeFileSync(filePath, JSON.stringify(usuariosIniciais, null, 2));
+        } else {
+             fs.writeFileSync(filePath, JSON.stringify([], null, 2));
+        }
     }
 };
 garantirArquivo(DATA_FILE);
-garantirArquivo(USERS_FILE); // Garante que o users.json existe
+garantirArquivo(USERS_FILE); // Garante que o users.json existe com um usuário de teste
 
 // Leitura/Escrita de Frota
 const lerFrota = () => {
@@ -53,8 +70,6 @@ const lerUsuarios = () => {
 const salvarUsuarios = (dados) => {
     fs.writeFileSync(USERS_FILE, JSON.stringify(dados, null, 2));
 };
-
-// Usuário fixo (removido, agora usamos o users.json)
 
 // Middleware de autenticação
 const autenticar = (req, res, next) => {
