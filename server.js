@@ -10,7 +10,7 @@ const SECRET_KEY = 'trackfleet-secret-2025'; // Em produção, use variável de 
 
 // URL do seu Frontend no Vercel para correção do CORS
 // ESTA URL DEVE SER A MESMA QUE SEU FRONTEND USA PARA ACESSAR A API
-const frontendUrl = 'https://trackfleet-nk2s2r3po-brunos-projects-d9448421.vercel.app'; 
+const frontendUrl = 'https://trackfleet-Seqo2ztiz-brunos-projects-d9448421.vercel.app'; 
 
 // Caminhos dos arquivos
 const DATA_FILE = path.join(__dirname, 'data', 'frota.json');
