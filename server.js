@@ -8,20 +8,41 @@ const app = express();
 const PORT = 5000;
 const SECRET_KEY = 'trackfleet-secret-2025'; // Em produção, use variável de ambiente
 
-// URL do seu Frontend no Vercel para correção do CORS
-// ESTA URL DEVE SER A MESMA QUE SEU FRONTEND USA PARA ACESSAR A API
-const frontendUrl = 'https://trackfleet-Seqo2ztiz-brunos-projects-d9448421.vercel.app'; 
+/// ... (parte superior do arquivo)
 
-// Caminhos dos arquivos
-const DATA_FILE = path.join(__dirname, 'data', 'frota.json');
-const USERS_FILE = path.join(__dirname, 'data', 'users.json');
+// 🚨 CORREÇÃO FINAL DO CORS: 
+// Aceita qualquer subdomínio do Vercel (*.vercel.app) e a URL do Render.
+const whitelist = [
+    'https://trackfleet-backend.onrender.com', // Opcional, para testes diretos
+    /.*\.vercel\.app$/ // Expressão regular para aceitar qualquer subdomínio.vercel.app
+];
 
-// Middleware
-app.use(cors({
-    origin: frontendUrl, // Permite apenas requisições desta origem (Vercel)
+const corsOptions = {
+    origin: (origin, callback) => {
+        // Permite requisições sem 'origin' (ex: ferramentas como Postman ou requisições de servidor para servidor)
+        if (!origin || whitelist.some(pattern => {
+            if (typeof pattern === 'string') {
+                return pattern === origin;
+            }
+            return pattern.test(origin);
+        })) {
+            callback(null, true);
+        } else {
+            callback(new Error('Não permitido por CORS'));
+        }
+    },
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
-}));
+};
+
+
+// ...
+
+// Middleware
+app.use(cors(corsOptions)); // Aplica a nova configuração de CORS flexível
+app.use(express.json());
+
+// ... (resto do arquivo)
 app.use(express.json());
 
 // --- Funções de Manipulação de Dados ---
