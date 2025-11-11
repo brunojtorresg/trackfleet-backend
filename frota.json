@@ -1,0 +1,18 @@
+[
+  {
+    "id": "1",
+    "placa": "ABC-1234",
+    "motorista": "Ana Silva",
+    "destino": "Belo Horizonte",
+    "status": "em rota",
+    "localizacao": "Rodovia Fernão Dias - KM 320"
+  },
+  {
+    "id": "2",
+    "placa": "XYZ-5678",
+    "motorista": "Pedro Costa",
+    "destino": "Uberlândia",
+    "status": "parado",
+    "localizacao": "Posto BR - Uberaba"
+  }
+]

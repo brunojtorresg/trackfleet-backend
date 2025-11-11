@@ -1,0 +1,18 @@
+[
+  {
+    "id": "1762886129790",
+    "placa": "DAY-9087",
+    "motorista": "BRUNO",
+    "destino": "SANTOS",
+    "localizacao": "DSSDSD",
+    "status": "entregue"
+  },
+  {
+    "id": "1762891110799",
+    "placa": "QWE-5678",
+    "motorista": "FÁBIO",
+    "destino": "CUIABA",
+    "localizacao": "Não informada",
+    "status": "entregue"
+  }
+]
